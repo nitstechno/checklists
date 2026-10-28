@@ -1,0 +1,9 @@
+# Local development: API also serves the frontend.  docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+services:
+  api:
+    user: root
+    environment:
+      FRONTEND_DIR: /frontend
+      DEBUG: "1"
+    volumes:
+      - ../frontend:/frontend:ro

@@ -1,0 +1,55 @@
+name: Deploy Checklists
+
+on:
+  push:
+    branches: [main]
+    paths: ["frontend/**", "backend/**", ".github/workflows/deploy.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: checklists-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          PORT: ${{ secrets.DEPLOY_PORT }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -p "${PORT:-22}" "$HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy backend (Docker Compose)
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PORT: ${{ secrets.DEPLOY_PORT }}
+          BACK: ${{ secrets.DEPLOY_BACK_PATH }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i $HOME/.ssh/id_deploy -p ${PORT:-22}"
+          rsync -az --delete --exclude '.env' --exclude 'uploads/' -e "$SSH" backend/ "$USER@$HOST:$BACK/"
+          $SSH "$USER@$HOST" "cd $BACK && docker compose up -d --build && docker image prune -f"
+
+      - name: Deploy frontend (release + atomic symlink)
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PORT: ${{ secrets.DEPLOY_PORT }}
+          DIR: ${{ secrets.DEPLOY_FRONT_PATH }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i $HOME/.ssh/id_deploy -p ${PORT:-22}"
+          REL="$(date +%Y%m%d%H%M%S)-${GITHUB_SHA::7}"
+          $SSH "$USER@$HOST" "mkdir -p $DIR/releases"
+          rsync -az --delete -e "$SSH" frontend/ "$USER@$HOST:$DIR/releases/$REL/"
+          $SSH "$USER@$HOST" "ln -sfn $DIR/releases/$REL $DIR/current.tmp && mv -Tf $DIR/current.tmp $DIR/current && cd $DIR/releases && ls -1dt */ | tail -n +6 | xargs -r rm -rf"
+          echo "Deployed $REL"

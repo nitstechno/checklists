@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Checklists</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600&family=Noto+Sans+Telugu:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:#f3f5f4;--card:#fff;--ink:#14201b;--mut:#5d6b64;--line:#e1e7e3;--pri:#0f7a5a;--pri2:#0a5c43;--on:#fff;--soft:#e6f4ee;--bad:#c0392b;--sh:0 1px 2px rgba(0,0,0,.05),0 8px 24px rgba(16,40,30,.07)}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1311;--card:#171e1b;--ink:#e8efeb;--mut:#93a39a;--line:#26312c;--pri:#34c28f;--pri2:#5bd3a7;--on:#06241a;--soft:#17302a;--bad:#ef7b6e;--sh:0 1px 2px rgba(0,0,0,.4)}}
+*{box-sizing:border-box}html{scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,"Noto Sans Devanagari","Noto Sans Telugu",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.in,.wrap{max-width:1180px;margin:0 auto}.in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px clamp(14px,3vw,32px)}
+.wrap{padding:22px clamp(14px,3vw,32px) calc(56px + env(safe-area-inset-bottom,0px))}
+@media(min-width:1600px){.in,.wrap{max-width:1440px}body{font-size:16px}}
+.brand{display:flex;gap:12px;align-items:center;cursor:pointer;min-width:0}.brand b{display:block;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand small{color:var(--mut)}
+.logo{width:42px;height:42px;border-radius:12px;object-fit:cover;background:var(--soft);flex:none}.ph{display:grid;place-items:center;font-size:1.3rem}
+.act{display:flex;gap:8px;align-items:center}@media(max-width:560px){.hide-s,.brand small{display:none}}
+.seg{display:inline-flex;background:var(--soft);padding:3px;border-radius:12px;gap:2px}.seg button{border:0;background:transparent;padding:6px 11px;border-radius:9px;font-weight:600;color:var(--mut)}.seg button[aria-pressed=true]{background:var(--card);color:var(--pri);box-shadow:var(--sh)}
+button,.btn{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:11px;padding:9px 14px;transition:.15s;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{border-color:var(--pri)}:focus-visible{outline:3px solid color-mix(in srgb,var(--pri) 40%,transparent);outline-offset:1px}
+.primary{background:var(--pri);color:var(--on);border-color:var(--pri);font-weight:600}.primary:hover{background:var(--pri2)}.dbg{background:var(--bad);border-color:var(--bad);color:#fff}.danger{color:var(--bad)}.ghost{background:transparent;border-color:transparent;color:var(--mut);padding-left:0}
+input[type=text],input[type=password],textarea{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--ink)}textarea{min-height:90px}
+label{display:block;font-size:.8rem;font-weight:600;color:var(--mut);margin:12px 0 4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--sh)}h1{font-size:clamp(1.3rem,2.4vw,1.8rem);margin:0}h2{font-size:1.1rem;margin:0 0 10px}.sub{color:var(--mut);font-size:.88rem}
+.hero{background:linear-gradient(135deg,#0f7a5a,#0a4f3b);color:#fff;border-radius:20px;padding:clamp(20px,3.5vw,38px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}.hero p{margin:6px 0 0;opacity:.88;max-width:640px}
+.cta{background:#fff;color:#0a4f3b;font-weight:600;border:0;padding:11px 18px;border-radius:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.tile{display:flex;flex-direction:column;gap:9px;text-align:left;transition:.15s}button.tile:hover,.tile:hover{transform:translateY(-2px);border-color:var(--pri)}
+.ic{width:48px;height:48px;border-radius:14px;background:var(--soft);display:grid;place-items:center;font-size:1.5rem;flex:none}
+.badge{display:inline-block;background:var(--soft);color:var(--pri);border-radius:99px;padding:2px 10px;font-size:.75rem;font-weight:600}
+.search{margin:20px 0}.search input{padding:13px 16px;border-radius:14px;font-size:1rem}
+.layout{display:grid;gap:24px}.side{display:none;position:sticky;top:84px;align-self:start;padding:10px}.side button{display:flex;width:100%;gap:10px;align-items:center;border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:12px}.side button.on{background:var(--soft);color:var(--pri);font-weight:600}
+@media(min-width:1000px){.layout{grid-template-columns:280px 1fr}.side{display:block}}
+.tabs{display:flex;background:var(--soft);padding:4px;border-radius:14px}.tabs button{flex:1;border:0;background:transparent;font-weight:600;padding:10px;color:var(--mut)}.tabs button.on{background:var(--pri);color:var(--on)}
+.fee{background:var(--soft);border-radius:12px;padding:10px 14px;margin:12px 0}
+.doc{display:flex;gap:14px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}.doc:last-child{border:0}
+.n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--soft);color:var(--pri);display:grid;place-items:center;font-size:.85rem;font-weight:700}.dt{flex:1;min-width:0}.rt{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:560px){.doc{flex-wrap:wrap}.rt{margin-left:44px;justify-content:flex-start}}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chip{padding:5px 11px;font-size:.82rem;border-radius:99px;background:var(--soft);border-color:transparent}.rt .chip{margin:0;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 0}
+.two{display:grid;gap:20px}@media(min-width:900px){.two{grid-template-columns:1fr 1fr;align-items:start}}.stack>*+*{margin-top:20px}
+.li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}.erow{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;background:var(--bg)}
+.sw{position:relative;width:44px;height:26px;flex:none}.sw input{opacity:0;position:absolute;inset:0;margin:0;cursor:pointer;z-index:1}.sw i{position:absolute;inset:0;background:var(--line);border-radius:99px;transition:.2s}.sw i:before{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}.sw input:checked+i{background:var(--pri)}.sw input:checked+i:before{transform:translateX(18px)}
+#dlg,#modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;z-index:60}#dlg .card{width:min(440px,100%)}
+#modal img{max-width:100%;max-height:78vh;border-radius:10px;background:#fff}#modal iframe{width:min(100%,800px);height:78vh;border:0;border-radius:10px;background:#fff}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:70;max-width:90vw}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const L=[["en","English"],["hi","हिन्दी"],["te","తెలుగు"]];
+const T={
+en:{pick:"Select your service",need:"Documents you need",back:"← All services",fee:"Fee",ready:"documents ready",print:"Print / Save",admin:"Admin",done:"All set! Bring these to the counter.",tick:"Tick each document you have with you."},
+hi:{pick:"अपनी सेवा चुनें",need:"ज़रूरी दस्तावेज़",back:"← सभी सेवाएँ",fee:"शुल्क",ready:"दस्तावेज़ तैयार",print:"प्रिंट / सेव",admin:"एडमिन",done:"सब तैयार! ये काउंटर पर दिखाएँ।",tick:"जो दस्तावेज़ आपके पास हैं उन पर टिक करें।"},
+te:{pick:"మీ సేవను ఎంచుకోండి",need:"కావలసిన పత్రాలు",back:"← అన్ని సేవలు",fee:"రుసుము",ready:"పత్రాలు సిద్ధం",print:"ప్రింట్ / సేవ్",admin:"అడ్మిన్",done:"అన్నీ సిద్ధం! కౌంటర్‌లో చూపించండి.",tick:"మీ దగ్గర ఉన్న ప్రతి పత్రంపై టిక్ చేయండి."}};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const RESERVED=["api","files","admin","assets","login","www","static","hub","docs"];
+let shop=(location.pathname.split("/").filter(Boolean)[0]||"").toLowerCase();
+let S={lang:"en",view:"home",sel:null,edit:null,data:null,user:null,proc:"new",cred:null,next:null};
+let CL=[];
+try{const l=localStorage.getItem("fh:lang");if(l)S.lang=l}catch(e){}
+const tok=()=>{try{return localStorage.getItem("fh:tok")}catch(e){return null}};
+async function api(path,opt={}){const h={...(opt.headers||{})},t=tok();if(t)h.Authorization="Bearer "+t;
+if(opt.json!==undefined){h["Content-Type"]="application/json";opt.body=JSON.stringify(opt.json)}
+const r=await fetch("/api"+path,{method:opt.method||"GET",headers:h,body:opt.body});let d=null;try{d=await r.json()}catch(e){}
+if(!r.ok){if(r.status===401&&t){try{localStorage.removeItem("fh:tok")}catch(e){}S.user=null}const m=d&&d.detail;throw new Error(typeof m==="string"?m:"Error "+r.status)}return d}
+const fail=e=>toast(e.message||String(e));
+const tr=(o,l=S.lang)=>(o&&(o[l]||o.en))||"";
+const pick=(a,l)=>a?(a[L.findIndex(x=>x[0]===l)]||a[0]||""):"";const docTxt=(d,l=S.lang)=>pick(Array.isArray(d)?d:d.t,l);
+function langBar(){return `<div class="seg">${L.map(([c,n])=>`<button aria-pressed="${S.lang===c}" onclick="setLang('${c}')">${n}</button>`).join("")}</div>`}
+function setLang(c){S.lang=c;try{localStorage.setItem("fh:lang",c)}catch(e){}render()}
+function go(v,id){S.proc="new";S.view=v;S.sel=id??null;S.edit=null;render();scrollTo(0,0)}
+const LANGV=["home","svc"];let DIR=[];
+function dialog({title,msg="",fields=[],ok="OK",danger=false}){return new Promise(res=>{const d=document.createElement("div");d.id="dlg";
+d.innerHTML=`<form class="card"><h2>${esc(title)}</h2><div class="sub">${esc(msg).replace(/\n/g,"<br>")}</div>${fields.map(f=>`<label>${esc(f.label)}</label><input type="${f.type||"text"}" name="${f.name}" autocomplete="off">`).join("")}<div class="row" style="justify-content:flex-end"><button type="button" data-x>Cancel</button><button class="primary ${danger?"dbg":""}">${esc(ok)}</button></div></form>`;
+const done=v=>{d.remove();res(v)};d.onclick=e=>{if(e.target===d||e.target.dataset.x!==undefined)done(null)};
+d.querySelector("form").onsubmit=e=>{e.preventDefault();const o={};fields.forEach(f=>o[f.name]=d.querySelector("[name="+f.name+"]").value);done(o)};
+document.body.appendChild(d);const i=d.querySelector("input");if(i)i.focus()})}
+const ask=(title,msg,ok,danger)=>dialog({title,msg,ok,danger}).then(r=>r!==null);
+let tt;function toast(m){let e=$("#toast");if(!e){e=document.createElement("div");e.id="toast";document.body.appendChild(e)}e.textContent=m;e.hidden=false;clearTimeout(tt);tt=setTimeout(()=>e.hidden=true,3500)}
+function head(){const d=S.data||{},u=S.user,lg=d.logo;
+return `<div class="top"><div class="in"><div class="brand" onclick="${d.slug?"go('home')":"visit('/')"}">${lg?`<img class="logo" src="${esc(lg)}" alt="">`:`<span class="logo ph">${d.slug?"🏪":"📋"}</span>`}<div style="min-width:0"><b>${esc(d.name||"Checklists")}</b><small>${d.slug?"Document checklist":"Service center directory"}</small></div></div><div class="act">${LANGV.includes(S.view)?langBar():""}<button class="${u?"primary":""}" onclick="userClick()" title="${u?esc(u.username):"Login"}">👤<span class="hide-s"> ${u?esc(u.username):"Login"}</span></button></div></div></div>`}
+const tile=s=>`<button class="card tile" onclick="go('svc','${s.id}')"><span class="ic">${esc(s.icon)}</span><b style="font-size:1.05rem">${esc(tr(s.name))}</b><span>${["new","edit"].filter(k=>s.procs[k].docs.length).map(k=>`<span class="badge">${PT[k][S.lang]}</span>`).join(" ")}</span></button>`;
+function home(){const d=S.data,t=T[S.lang];
+return `<section class="hero"><div><h1>${esc(d.name)}</h1>${d.address?`<p>📍 ${esc(d.address)}</p>`:""}<p>${t.pick}</p></div>${d.phone?`<a class="btn cta" href="tel:${esc(d.phone)}">📞 ${esc(d.phone)}</a>`:""}</section>
+<div class="grid" style="margin-top:20px">${d.services.map(tile).join("")||`<div class="sub">No services added yet.</div>`}</div>`}
+function svc(){const t=T[S.lang],d=S.data,s=d.services.find(x=>String(x.id)===String(S.sel));if(!s)return home();
+const ks=["new","edit"].filter(k=>s.procs[k].docs.length||s.procs[k].refs.length);if(!ks.includes(S.proc))S.proc=ks[0]||"new";const p=s.procs[S.proc];
+return `<div class="layout"><aside class="side card">${d.services.map(x=>`<button class="${x===s?"on":""}" onclick="go('svc','${x.id}')"><span class="ic" style="width:34px;height:34px;font-size:1.1rem;border-radius:10px">${esc(x.icon)}</span>${esc(tr(x.name))}</button>`).join("")}</aside>
+<section><button class="ghost" onclick="go('home')">${t.back}</button><h1 style="margin:4px 0 16px;display:flex;gap:12px;align-items:center"><span class="ic">${esc(s.icon)}</span>${esc(tr(s.name))}</h1>
+${ks.length>1?`<div class="tabs">${ks.map(k=>`<button class="${k===S.proc?"on":""}" onclick="S.proc='${k}';render()">${PT[k][S.lang]}</button>`).join("")}</div>`:""}
+<div class="sub" style="margin:10px 2px 0">${SUB[S.proc][S.lang]}</div>${p.fee?`<div class="fee"><b>${t.fee}:</b> ${esc(p.fee)}</div>`:""}
+<div class="card" style="padding:0;margin-top:12px">${p.docs.length?p.docs.map((d,i)=>`<div class="doc"><span class="n">${i+1}</span><div class="dt">${esc(docTxt(d))}${pick(d.i,S.lang)?`<div class="sub">${esc(pick(d.i,S.lang))}</div>`:""}</div>${d.refs.length?`<div class="rt">${refBtns(d.refs)}</div>`:""}</div>`).join(""):`<div class="sub" style="padding:16px">${NO[S.lang]}</div>`}</div>
+${p.refs.length?`<h2 style="margin-top:22px">${RT[S.lang][0]}</h2><div class="card">${refChips(p.refs)}</div>`:""}</section></div>`}
+// ---------- Admin ----------
+function visit(p){history.pushState(null,"",p);boot()}
+function userClick(){const u=S.user;if(!u)return go("login");
+if(u.role==="global")return S.data&&S.data.slug?go("manage"):(go("dash"),loadCenters());
+if(u.center_slug===shop)return go("manage");S.next="manage";visit("/"+u.center_slug)}
+function loginView(){return `<div class="card" style="max-width:440px;margin:40px auto"><h1>Login</h1><div class="sub">For the global admin and center owners. Credentials are issued by the global admin.</div><label>Username</label><input type="text" id="lu" autocomplete="username" autocapitalize="none"><label>Password</label><input type="password" id="lp" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"><div class="row"><button class="primary" style="flex:1" onclick="login()">Login</button><button onclick="go(S.data&&S.data.slug?'home':'landing')">Cancel</button></div></div>`}
+async function login(){try{const r=await api("/auth/login",{method:"POST",json:{username:$("#lu").value,password:$("#lp").value}});try{localStorage.setItem("fh:tok",r.token)}catch(e){}S.user=r.user;
+if(r.user.role==="global"){if(S.data&&S.data.slug)go("manage");else{go("dash");loadCenters()}}else if(r.user.center_slug===shop)go("manage");else{S.next="manage";visit("/"+r.user.center_slug)}}catch(e){fail(e)}}
+function logout(){try{localStorage.removeItem("fh:tok")}catch(e){}S.user=null;S.next=null;visit(shop?"/"+shop:"/")}
+async function reload(){S.data=norm(await api("/centers/"+shop))}
+async function upd(x){const b={name:S.data.name,phone:S.data.phone,address:S.data.address||"",logo:S.data.logo||"",...x};try{await api("/centers/"+shop,{method:"PUT",json:b});await reload();render();toast("Saved")}catch(e){fail(e)}}
+function saveShop(){upd({name:$("#sn").value,phone:$("#sp").value,address:$("#sa").value})}
+async function upload(f,max=1400){let blob=f;
+if(f.type.startsWith("image/")){blob=await new Promise((ok,no)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const sc=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*sc;c.height=im.height*sc;const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);c.toBlob(b=>b?ok(b):no(new Error("Image error")),"image/jpeg",.85)};im.onerror=()=>no(new Error("Not a valid image"));im.src=fr.result};fr.readAsDataURL(f)})}
+else if(f.type!=="application/pdf")throw new Error("Choose an image or a PDF");
+const fd=new FormData();fd.append("file",blob,f.name.replace(/\.[^.]+$/,"")+(f.type==="application/pdf"?".pdf":".jpg"));return api("/centers/"+shop+"/files",{method:"POST",body:fd})}
+async function pickLogo(inp){const f=inp.files[0];inp.value="";if(!f)return;try{const r=await upload(f,256);await upd({logo:r.src})}catch(e){fail(e)}}
+async function chpw(){try{await api("/auth/password",{method:"POST",json:{old:$("#pw0").value,new:$("#pw1").value}});toast("Password changed");$("#pw0").value=$("#pw1").value=""}catch(e){fail(e)}}
+async function del(i){if(!await ask("Delete service?","This removes the service and its documents.","Delete",true))return;try{await api("/centers/"+shop+"/services/"+S.data.services[i].id,{method:"DELETE"});await reload();render()}catch(e){fail(e)}}
+function manage(){const d=S.data,u=S.user;if(S.edit!==null&&S.edit!==undefined)return editor();const lg=d.logo||"",url=location.origin+"/"+d.slug;
+return `<div class="row" style="margin:0"><button onclick="go('home')">← View site</button>${u.role==="global"?`<button onclick="S.next='dash';visit('/')">All centers</button>`:""}<button onclick="logout()">Log out (${esc(u.username)})</button></div>
+<h1 style="margin:14px 0">Manage ${esc(d.name)}</h1>${d.active?"":`<div class="fee">⚠ This center is disabled. Customers see “not found”.</div>`}
+<div class="two"><div class="stack"><div class="card"><h2>Center details</h2><input type="file" id="lf" accept="image/*" hidden onchange="pickLogo(this)">
+<div style="display:flex;gap:12px;align-items:center">${lg?`<img class="logo" src="${esc(lg)}" alt="">`:`<span class="logo ph">🏪</span>`}<div class="chips" style="margin:0"><button class="chip" onclick="$('#lf').click()">📷 Upload logo</button>${lg?`<button class="chip" onclick="upd({logo:''})">Remove</button>`:""}</div></div>
+<label>Center name</label><input type="text" id="sn" value="${esc(d.name)}"><label>Phone</label><input type="text" id="sp" value="${esc(d.phone)}"><label>Address / details</label><input type="text" id="sa" value="${esc(d.address||"")}"><div class="row"><button class="primary" onclick="saveShop()">Save</button></div></div>
+<div class="card"><h2>QR code</h2><input type="text" id="qu" value="${esc(url)}" onchange="mkqr()"><div id="qr" style="margin-top:12px;background:#fff;display:inline-block;padding:10px;border-radius:12px"></div></div>
+<div class="card"><h2>Change password</h2><div class="cols"><div><label>Current</label><input type="password" id="pw0" autocomplete="current-password"></div><div><label>New (min 8)</label><input type="password" id="pw1" autocomplete="new-password"></div></div><div class="row"><button onclick="chpw()">Change password</button></div></div></div>
+<div class="card"><div class="li" style="border:0;padding-top:0"><h2 style="margin:0">Services</h2><button class="primary" onclick="openEdit(-1)">+ New service</button></div>${d.services.map((s,i)=>`<div class="li"><span style="display:flex;gap:10px;align-items:center"><span class="ic" style="width:38px;height:38px;font-size:1.2rem;border-radius:11px">${esc(s.icon)}</span>${esc(tr(s.name))}</span><span><button onclick="openEdit(${i})">Edit</button> <button class="danger" onclick="del(${i})">🗑</button></span></div>`).join("")||`<div class="sub">No services yet.</div>`}</div></div>`}
+async function loadCenters(){try{CL=await api("/admin/centers")}catch(e){fail(e)}render()}
+async function addCenter(){try{const r=await api("/admin/centers",{method:"POST",json:{name:$("#cn").value,slug:$("#cs").value,phone:$("#cp").value,address:$("#ca").value}});S.cred=r;await loadCenters()}catch(e){fail(e)}}
+async function resetPw(s){if(!await ask("Reset password?","Generate a new password for "+s+". The old one stops working.","Reset"))return;try{const r=await api("/admin/centers/"+s+"/reset-password",{method:"POST"});S.cred={slug:s,name:s,...r};render()}catch(e){fail(e)}}
+async function toggleC(s,a){try{await api("/admin/centers/"+s,{method:"PATCH",json:{active:a}});await loadCenters()}catch(e){fail(e);loadCenters()}}
+async function delC(s){const r=await dialog({title:"Delete center?",msg:"This permanently deletes the center, its services and uploaded files.\nType the slug to confirm: "+s,fields:[{name:"v",label:"Slug"}],ok:"Delete",danger:true});if(!r||r.v!==s)return;try{await api("/admin/centers/"+s,{method:"DELETE"});await loadCenters()}catch(e){fail(e)}}
+const credBox=()=>S.cred?`<div class="card" style="margin-top:10px"><b>Share with the center — shown once</b><textarea id="cb" rows="5" readonly>${esc("Center: "+S.cred.name+"\nLink: "+location.origin+"/"+S.cred.slug+"\nUsername: "+S.cred.username+"\nPassword: "+S.cred.password+"\n(open the link, tap the 👤 icon and log in)")}</textarea><div class="row"><button onclick="$('#cb').select();document.execCommand('copy')">Copy</button><button onclick="S.cred=null;render()">Close</button></div></div>`:""
+function dash(){if(!S.user||S.user.role!=="global")return landing();
+return `<div class="row" style="margin:0"><button onclick="go('landing')">← Directory</button><button onclick="logout()">Log out (${esc(S.user.username)})</button></div><h1 style="margin:14px 0">Manage centers</h1>
+<div class="card"><h2>New center</h2><div class="cols"><div><label>Center name</label><input type="text" id="cn"></div><div><label>Slug (URL) — optional</label><input type="text" id="cs" placeholder="auto from name"></div><div><label>Phone</label><input type="text" id="cp"></div><div><label>Address</label><input type="text" id="ca"></div></div><div class="row"><button class="primary" onclick="addCenter()">+ Create center</button></div><div class="sub" style="margin-top:8px">Creates the center with the starter services and a login for its admin.</div></div>${credBox()}
+<div class="grid" style="margin-top:16px">${CL.map(c=>`<div class="card tile"><div class="li" style="border:0;padding:0"><b>${esc(c.name)}</b><span class="sw" title="${c.active?"Enabled":"Disabled"}"><input type="checkbox" ${c.active?"checked":""} onchange="toggleC('${c.slug}',this.checked)"><i></i></span></div><div class="sub">/${esc(c.slug)} · login <b>${esc(c.username||"-")}</b><br>${esc(c.address||"")} ${c.phone?"· "+esc(c.phone):""}<br>${c.services} services</div><div class="chips" style="margin:0"><button class="chip" onclick="visit('/${esc(c.slug)}')">Open</button><button class="chip" onclick="resetPw('${esc(c.slug)}')">Reset password</button><button class="chip danger" onclick="delC('${esc(c.slug)}')">Delete</button></div></div>`).join("")}</div>`}
+function mkqr(){const el=$("#qr");el.innerHTML="";if(window.QRCode)new QRCode(el,{text:$("#qu").value,width:180,height:180});else el.textContent="QR library not loaded"}
+function render(){REFS.length=0;document.documentElement.lang=S.lang;const V={nf,landing,login:loginView,dash,svc};
+const v=S.view==="manage"?(S.user&&S.data?manage():loginView()):(V[S.view]||home)();$("#app").innerHTML=head()+`<main class="wrap">${v}</main>`;
+if(S.view==="manage"&&$("#qr"))setTimeout(mkqr,0)}
+const PT={new:{en:"Apply new",hi:"नया आवेदन",te:"కొత్త దరఖాస్తు"},edit:{en:"Modify / Correction",hi:"बदलाव / सुधार",te:"మార్పులు / సవరణ"}};
+const SUB={new:{en:"Documents needed to apply for a new one",hi:"नया आवेदन करने के लिए ज़रूरी दस्तावेज़",te:"కొత్తగా దరఖాస్తు చేయడానికి కావలసిన పత్రాలు"},edit:{en:"Documents needed to change name, address or other details",hi:"नाम, पता या अन्य विवरण बदलने के लिए ज़रूरी दस्तावेज़",te:"పేరు, చిరునామా లేదా ఇతర వివరాలు మార్చడానికి కావలసిన పత్రాలు"}};
+const NO={en:"No documents added yet.",hi:"अभी कोई दस्तावेज़ नहीं जोड़ा गया।",te:"ఇంకా పత్రాలు జోడించలేదు."};
+const VW={en:"View",hi:"देखें",te:"చూడండి"};
+const pn=p=>({fee:p.fee||"",refs:p.refs||[],docs:(p.docs||[]).map(x=>Array.isArray(x)?{t:x,i:["","",""],refs:[]}:{t:x.t,i:x.i||["","",""],refs:x.refs||[]})});
+const norm=d=>{(d.services||[]).forEach(s=>{s.procs=s.procs||{};s.procs.new=pn(s.procs.new||{});s.procs.edit=pn(s.procs.edit||{})});return d};
+const REFS=[];
+const RT={en:["Sample forms & references"],hi:["नमूना फॉर्म और संदर्भ"],te:["నమూనా ఫారాలు & సూచనలు"]};
+function refChips(rs){return rs&&rs.length?`<div class="chips">${rs.map(r=>{REFS.push(r);return `<button class="chip" onclick="viewRef(${REFS.length-1})">${r.type==="pdf"?"📄":"🖼"} ${esc(r.name)}</button>`}).join("")}</div>`:""}
+function blobUrl(src){if(!src.startsWith("data:"))return src;const[h,b]=src.split(",");const bin=atob(b),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return URL.createObjectURL(new Blob([u],{type:h.slice(5).split(";")[0]}))}
+function viewRef(i){const r=REFS[i],u=blobUrl(r.src);closeRef();const m=document.createElement("div");m.id="modal";m.onclick=e=>{if(e.target===m)closeRef()};
+m.innerHTML=`<div style="color:#fff;margin-bottom:8px;display:flex;gap:12px;align-items:center"><b>${esc(r.name)}</b><a href="${esc(u)}" target="_blank" rel="noopener" style="color:#fff">Open ↗</a><button onclick="closeRef()">✕</button></div>`+(r.type==="image"?`<img src="${esc(u)}" alt="${esc(r.name)}">`:`<iframe src="${esc(u)}"></iframe>`);document.body.appendChild(m)}
+function closeRef(){const m=$("#modal");if(m)m.remove()}
+addEventListener("keydown",e=>{if(e.key==="Escape")closeRef()});
+function refBtns(rs){return rs.map(r=>{REFS.push(r);return `<button class="chip" onclick="viewRef(${REFS.length-1})">👁 ${rs.length===1?VW[S.lang]:esc(r.name)}</button>`}).join("")}
+// ---- admin editor: two processes per service, files per document ----
+const cur=()=>S.draft.procs[S.ep];
+function openEdit(i){S.edit=i;S.ep="new";S.draft=i>=0?JSON.parse(JSON.stringify(S.data.services[i])):{icon:"📄",name:{},procs:{new:{fee:"",refs:[],docs:[{t:["","",""],refs:[]}]},edit:{fee:"",refs:[],docs:[]}}};render()}
+function cancelEdit(){S.edit=null;S.draft=null;render()}
+function editor(){const d=S.draft,i=S.edit,p=cur();
+const rt=(rs,k)=>rs.map((r,j)=>`<span class="chip">${r.type==="pdf"?"📄":"🖼"} ${esc(r.name)} <b style="cursor:pointer" onclick="rmRef(${k},${j})">✕</b></span>`).join("");
+const att=k=>`<div class="chips">${rt(k<0?p.refs:p.docs[k].refs,k)}<button class="chip" onclick="S.at=${k};$('#fi').click()">📎 Attach image / PDF</button><button class="chip" onclick="addLink(${k})">🔗 Link</button></div>`;
+return `<button onclick="cancelEdit()">← Back</button><h2>${i>=0?"Edit":"New"} service</h2><div class="card"><input type="file" id="fi" accept="image/*,.pdf" hidden onchange="gotFile(this)">
+<div class="cols"><div><label>Icon (emoji)</label><input type="text" value="${esc(d.icon)}" oninput="S.draft.icon=this.value"></div>${L.map(([c,n])=>`<div><label>Service name — ${n}</label><input type="text" value="${esc(d.name[c]||"")}" oninput="S.draft.name['${c}']=this.value"></div>`).join("")}</div>
+<h2>Process</h2><div class="tabs">${["new","edit"].map(k=>`<button class="${k===S.ep?"on":""}" onclick="S.ep='${k}';render()">${PT[k].en}</button>`).join("")}</div>
+<label>Fee / note for this process (optional)</label><input type="text" value="${esc(p.fee)}" oninput="cur().fee=this.value">
+<h2>Documents required</h2>${p.docs.map((x,k)=>`<div class="erow"><b>#${k+1}</b> <button class="link" onclick="rmDoc(${k})">remove</button><div class="cols">${L.map(([c,n],q)=>`<div><label>${n}</label><input type="text" value="${esc(x.t[q]||"")}" oninput="cur().docs[${k}].t[${q}]=this.value"></div>`).join("")}</div><div class="cols">${L.map(([c,n],q)=>`<div><input type="text" placeholder="Info / note — ${n} (optional)" value="${esc((x.i||[])[q]||"")}" oninput="(cur().docs[${k}].i=cur().docs[${k}].i||['','',''])[${q}]=this.value"></div>`).join("")}</div>${att(k)}</div>`).join("")}
+<button onclick="addDoc()">+ Add document</button>
+<h2>Sample forms for this process</h2>${att(-1)}
+<div class="sub" style="margin-top:8px">Uploads: JPG, PNG, WEBP or PDF up to 5 MB (images are resized automatically). Empty Hindi/Telugu fields fall back to English. A process with no documents is hidden from customers.</div>
+<div class="row"><button class="primary" onclick="saveSvc()">Save service</button></div></div>`}
+function addDoc(){cur().docs.push({t:["","",""],refs:[]});render()}
+function rmDoc(k){cur().docs.splice(k,1);render()}
+function rmRef(k,j){(k<0?cur().refs:cur().docs[k].refs).splice(j,1);render()}
+function pushRef(r){(S.at<0?cur().refs:cur().docs[S.at].refs).push(r);render()}
+async function addLink(k){S.at=k;const r=await dialog({title:"Add a link",fields:[{name:"u",label:"Full link (https://…)"},{name:"n",label:"Label"}],ok:"Add"});if(!r||!r.u.trim())return;const u=r.u.trim();pushRef({name:r.n.trim()||u.split("/").pop()||u,type:/\.pdf($|\?)/i.test(u)?"pdf":"image",src:u})}
+async function gotFile(inp){const f=inp.files[0];inp.value="";if(!f)return;try{const r=await upload(f);pushRef({name:f.name,type:r.type,src:r.src})}catch(e){fail(e)}}
+async function saveSvc(){const d=S.draft,i=S.edit;["new","edit"].forEach(k=>{const p=d.procs[k];p.docs=p.docs.filter(x=>x.t[0].trim());p.docs.forEach(x=>{x.t[1]=x.t[1]||x.t[0];x.t[2]=x.t[2]||x.t[0]})});
+if(!(d.name.en||"").trim()||!(d.procs.new.docs.length||d.procs.edit.docs.length)){toast("English service name and at least one document are required");return}
+d.name.hi=d.name.hi||d.name.en;d.name.te=d.name.te||d.name.en;const body={icon:d.icon,name:d.name,procs:d.procs};
+try{if(i>=0)await api("/centers/"+shop+"/services/"+d.id,{method:"PUT",json:body});else await api("/centers/"+shop+"/services",{method:"POST",json:body});await reload();cancelEdit()}catch(e){fail(e)}}
+function nf(){return `<div class="card" style="margin-top:40px;text-align:center"><div style="font-size:2.5rem">🔍</div><h2>Center not found</h2><div class="sub">This address is not registered. Please check the QR code or ask the center.</div></div>`}
+const dirList=()=>{const q=(S.q||"").toLowerCase();return DIR.filter(c=>(c.name+" "+c.address+" "+c.phone+" "+c.services.map(s=>s.en).join(" ")).toLowerCase().includes(q))};
+const dirCards=l=>l.map(c=>`<article class="card tile"><div style="display:flex;gap:12px;align-items:center">${c.logo?`<img class="logo" src="${esc(c.logo)}" alt="">`:`<span class="logo ph">🏪</span>`}<div style="min-width:0"><b style="font-size:1.05rem">${esc(c.name)}</b>${c.address?`<div class="sub">📍 ${esc(c.address)}</div>`:""}</div></div>${c.phone?`<a href="tel:${esc(c.phone)}" style="color:var(--pri);text-decoration:none">📞 ${esc(c.phone)}</a>`:""}<div class="chips" style="margin:0">${c.services.slice(0,6).map(n=>`<span class="badge">${esc(tr(n))}</span>`).join("")}</div><a class="btn primary" href="/${esc(c.slug)}" style="margin-top:auto;text-align:center">Open checklist →</a></article>`).join("")||`<div class="sub">No centers found.</div>`;
+function dirRender(){$("#dir").innerHTML=dirCards(dirList())}
+function landing(){return `<section class="hero"><div><h1>Find your service center</h1><p>Pick a center to see the documents required for PAN, Passport, Ration Card, Scholarship and more.</p></div></section>
+<div class="search"><input type="text" id="q" placeholder="Search by name, area, phone or service…" value="${esc(S.q||"")}" oninput="S.q=this.value;dirRender()"></div><div class="grid" id="dir">${dirCards(dirList())}</div>`}
+async function boot(){$("#app").textContent="…";const nv=S.next;S.next=null;S.edit=null;S.draft=null;S.proc="new";
+shop=(location.pathname.split("/").filter(Boolean)[0]||"").toLowerCase();
+if(tok()&&!S.user){try{S.user=await api("/auth/me")}catch(e){S.user=null}}
+if(!shop||RESERVED.includes(shop)){S.data=null;try{DIR=await api("/centers")}catch(e){DIR=[]}
+if(nv==="dash"&&S.user&&S.user.role==="global"){S.view="dash";await loadCenters()}else{S.view="landing";render()}return}
+try{S.data=norm(await api("/centers/"+encodeURIComponent(shop)));S.view=nv||"home"}catch(e){S.data=null;S.view="nf"}
+render()}
+addEventListener("popstate",()=>boot());
+boot();
+</script>
+</body>
+</html>

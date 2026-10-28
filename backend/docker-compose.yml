@@ -1,0 +1,40 @@
+# One file for local test AND production. Differences come only from backend/.env
+#   local/test : copy .env.example            -> http://localhost:8000  (frontend + API + /api/docs)
+#   production : copy .env.production.example -> API on 127.0.0.1:8100 behind nginx
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-checklists}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-checklists}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-checklists} -d ${POSTGRES_DB:-checklists}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-checklists}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-checklists}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
+      UPLOAD_DIR: /data/uploads
+      FRONTEND_DIR: ${FRONTEND_DIR:-/frontend}   # "off" in production (nginx serves the frontend)
+      DEBUG: ${DEBUG:-}                          # 1 = API docs at /api/docs
+    volumes:
+      # a bare name (default "uploads") is a Docker volume; a path (/srv/checklists/uploads) is a host folder
+      - ${UPLOADS_HOST_DIR:-uploads}:/data/uploads
+      - ${FRONTEND_HOST_DIR:-../frontend}:/frontend:ro
+    ports:
+      - "${BIND_ADDR:-0.0.0.0}:${API_PORT:-8000}:8000"
+
+volumes:
+  pgdata:
+  uploads:
